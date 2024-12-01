@@ -51,6 +51,8 @@ public:
       "/ground_control_unit/detection", sensor_qos, std::bind(
         &GroundControlUnitDetections::detection_cb, this,
         _1));
+
+    RCLCPP_INFO(node->get_logger(), "Ground Control Unit Plugin initialized");
   }
 
   Subscriptions get_subscriptions() override
