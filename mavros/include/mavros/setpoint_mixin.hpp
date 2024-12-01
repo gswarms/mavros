@@ -86,6 +86,54 @@ public:
   }
 };
 
+template<class D>
+class LocalPositionNEDCOVMixin
+{
+public:
+//! Message specification: @p https://mavlink.io/en/messages/common.html#LOCAL_POSITION_NED_COV
+  void local_position_ned_cov(
+    uint32_t time_boot_ms, 
+    uint8_t coordinate_frame,
+    Eigen::Vector3d p,
+    Eigen::Vector3d v,
+    Eigen::Matrix<float, 1, 9> p_cov,
+    Eigen::Matrix<float, 1, 9> v_cov)
+  {
+    static_assert(
+      std::is_base_of<plugin::Plugin, D>::value,
+      "LocalPositionNEDCOVMixin should be used by mavros::plugin::Plugin child");
+
+    plugin::UASPtr uas_ = static_cast<D *>(this)->uas;
+
+    mavlink::common::msg::LOCAL_POSITION_NED_COV sp = {};
+
+    // [[[cog:
+    // for f in ('time_boot_ms', 'coordinate_frame', 'type_mask', 'yaw', 'yaw_rate'):
+    //     cog.outl(f"sp.{f} = {f};")
+    // for fp, vp in (('', 'p'), ('v', 'v'), ('af', 'af')):
+    //     for a in ('x', 'y', 'z'):
+    //         cog.outl(f"sp.{fp}{a} = {vp}.{a}();")
+    // ]]]
+    sp.time_usec = time_boot_ms;
+    sp.estimator_type = coordinate_frame;
+
+    sp.x = p[0];
+    sp.y = p[1];
+    sp.z = p[2];
+
+    sp.vx = v[0];
+    sp.vy = v[1];
+    sp.vz = v[2];
+
+    for (int i = 0; i < 9; ++i) {
+        sp.covariance[i] = p_cov[i];
+        sp.covariance[i + 9] = v_cov[i];
+    }
+
+    uas_->send_message(sp);
+  }
+};
+
 /**
  * @brief This mixin adds set_position_target_global_int()
  */

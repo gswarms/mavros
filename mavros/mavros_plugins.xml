@@ -137,5 +137,11 @@ Required by all plugins.</description>
     <description>@brief Wind estimation plugin.
 @plugin wind_estimation</description>
   </class>
+  <class name="ground_control_unit_detection" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::GroundControlUnitDetections&gt;" base_class_type="mavros::plugin::PluginFactory">
+    <description>@brief Ground Control Unit Detection plugin
+@plugin ground_control_unit_detection
+
+Publishes detections from the ground control unit to the FCU.</description>
+  </class>
 </library>
 <!-- [[[end]]] (checksum: e47485a8565112ddf4058c7a77bcc519) -->
