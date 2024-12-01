@@ -48,7 +48,7 @@ public:
     auto sensor_qos = rclcpp::SensorDataQoS();
 
     detection_sub = node->create_subscription<nav_msgs::msg::Odometry>(
-      "~/detection", sensor_qos, std::bind(
+      "/ground_control_unit/detection", sensor_qos, std::bind(
         &GroundControlUnitDetections::detection_cb, this,
         _1));
   }
