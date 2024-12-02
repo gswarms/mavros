@@ -3,7 +3,7 @@ project(mavros)
 
 # Default to C++20
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_STANDARD 14)
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
 endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -157,6 +157,9 @@ add_library(mavros_plugins SHARED
   src/plugins/sys_time.cpp
   src/plugins/waypoint.cpp
   src/plugins/wind_estimation.cpp
+
+  # ground_control_detection
+  src/plugins/ground_control_unit_detection.cpp
   # [[[end]]] (checksum: ccf56c1a56e9dccf8464483f7b1eab99)
 )
 add_dependencies(mavros_plugins
