@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <library path="mavros_plugins">
   <!-- <class name="actuator_control" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::ActuatorControlPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <class name="altitude" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::AltitudePlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
+  <!-- <class name="altitude" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::AltitudePlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
   <class name="command" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::CommandPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <!-- <class name="ftp" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::FTPPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
   <!-- <class name="geofence" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::GeofencePlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <class name="global_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::GlobalPositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
-  <class name="home_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::HomePositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
-  <class name="imu" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::IMUPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
+  <!-- <class name="global_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::GlobalPositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
+  <!-- <class name="home_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::HomePositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
+  <!-- <class name="imu" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::IMUPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
   <class name="local_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::LocalPositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <!-- <class name="manual_control" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::ManualControlPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
   <!-- <class name="nav_controller_output" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::NavControllerOutputPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->

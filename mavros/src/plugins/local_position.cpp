@@ -79,20 +79,6 @@ public:
       });
 
     auto sensor_qos = rclcpp::SensorDataQoS();
-
-    local_position = node->create_publisher<geometry_msgs::msg::PoseStamped>("~/pose", sensor_qos);
-    local_position_cov = node->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
-      "~/pose_cov", sensor_qos);
-    local_velocity_local = node->create_publisher<geometry_msgs::msg::TwistStamped>(
-      "~/velocity_local", sensor_qos);
-    local_velocity_body = node->create_publisher<geometry_msgs::msg::TwistStamped>(
-      "~/velocity_body",
-      sensor_qos);
-    local_velocity_cov = node->create_publisher<geometry_msgs::msg::TwistWithCovarianceStamped>(
-      "~/velocity_body_cov", sensor_qos);
-    local_accel = node->create_publisher<geometry_msgs::msg::AccelWithCovarianceStamped>(
-      "~/accel",
-      sensor_qos);
     local_odom = node->create_publisher<nav_msgs::msg::Odometry>("~/odom", sensor_qos);
   }
 
@@ -105,12 +91,7 @@ public:
   }
 
 private:
-  rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr local_position;
-  rclcpp::Publisher<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr local_position_cov;
-  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr local_velocity_local;
-  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr local_velocity_body;
-  rclcpp::Publisher<geometry_msgs::msg::TwistWithCovarianceStamped>::SharedPtr local_velocity_cov;
-  rclcpp::Publisher<geometry_msgs::msg::AccelWithCovarianceStamped>::SharedPtr local_accel;
+
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr local_odom;
 
   std::string frame_id;                 //!< frame for Pose
@@ -142,65 +123,21 @@ private:
   {
     has_local_position_ned = true;
 
-    //--------------- Transform FCU position and Velocity Data ---------------//
-    auto enu_position = ftf::transform_frame_ned_enu(
-      Eigen::Vector3d(
-        pos_ned.x, pos_ned.y,
-        pos_ned.z));
-    auto enu_velocity =
-      ftf::transform_frame_ned_enu(Eigen::Vector3d(pos_ned.vx, pos_ned.vy, pos_ned.vz));
-
-    //--------------- Get Odom Information ---------------//
-    // Note this orientation describes baselink->ENU transform
-    auto enu_orientation_msg = uas->data.get_attitude_orientation_enu();
-    auto baselink_angular_msg = uas->data.get_attitude_angular_velocity_enu();
-    Eigen::Quaterniond enu_orientation; tf2::fromMsg(enu_orientation_msg, enu_orientation);
-    auto baselink_linear =
-      ftf::transform_frame_enu_baselink(enu_velocity, enu_orientation.inverse());
-
     auto odom = nav_msgs::msg::Odometry();
     odom.header = uas->synchronized_header(frame_id, pos_ned.time_boot_ms);
     odom.child_frame_id = tf_child_frame_id;
 
-    odom.pose.pose.position = tf2::toMsg(enu_position);
-    odom.pose.pose.orientation = enu_orientation_msg;
-    tf2::toMsg(baselink_linear, odom.twist.twist.linear);
-    odom.twist.twist.angular = baselink_angular_msg;
+    odom.pose.pose.position.x = pos_ned.x;
+    odom.pose.pose.position.y = pos_ned.y;
+    odom.pose.pose.position.z = pos_ned.z;
 
-    // publish odom if we don't have LOCAL_POSITION_NED_COV
-    if (!has_local_position_ned_cov) {
-      local_odom->publish(odom);
-    }
+    
+    odom.twist.twist.linear.x = pos_ned.vx;
+    odom.twist.twist.linear.y = pos_ned.vy;
+    odom.twist.twist.linear.z = pos_ned.vz;
 
-    // publish pose always
-    auto pose = geometry_msgs::msg::PoseStamped();
-    pose.header = odom.header;
-    pose.pose = odom.pose.pose;
-    local_position->publish(pose);
-
-    // publish velocity always
-    // velocity in the body frame
-    auto twist_body = geometry_msgs::msg::TwistStamped();
-    twist_body.header.stamp = odom.header.stamp;
-    twist_body.header.frame_id = tf_child_frame_id;
-    twist_body.twist.linear = odom.twist.twist.linear;
-    twist_body.twist.angular = baselink_angular_msg;
-    local_velocity_body->publish(twist_body);
-
-    // velocity in the local frame
-    auto twist_local = geometry_msgs::msg::TwistStamped();
-    twist_local.header.stamp = twist_body.header.stamp;
-    twist_local.header.frame_id = tf_child_frame_id;
-    tf2::toMsg(enu_velocity, twist_local.twist.linear);
-    tf2::toMsg(
-      ftf::transform_frame_baselink_enu(ftf::to_eigen(baselink_angular_msg), enu_orientation),
-      twist_local.twist.angular);
-
-    local_velocity_local->publish(twist_local);
-
-    // publish tf
-    publish_tf(odom);
-  }
+    local_odom->publish(odom);
+   }
 
   void handle_local_position_ned_cov(
     const mavlink::mavlink_message_t * msg [[maybe_unused]],
@@ -209,85 +146,24 @@ private:
   {
     has_local_position_ned_cov = true;
 
-    auto enu_position = ftf::transform_frame_ned_enu(
-      Eigen::Vector3d(
-        pos_ned.x, pos_ned.y,
-        pos_ned.z));
-    auto enu_velocity =
-      ftf::transform_frame_ned_enu(Eigen::Vector3d(pos_ned.vx, pos_ned.vy, pos_ned.vz));
-
-    auto enu_orientation_msg = uas->data.get_attitude_orientation_enu();
-    auto baselink_angular_msg = uas->data.get_attitude_angular_velocity_enu();
-    Eigen::Quaterniond enu_orientation; tf2::fromMsg(enu_orientation_msg, enu_orientation);
-    auto baselink_linear =
-      ftf::transform_frame_enu_baselink(enu_velocity, enu_orientation.inverse());
 
     auto odom = nav_msgs::msg::Odometry();
     odom.header = uas->synchronized_header(frame_id, pos_ned.time_usec);
     odom.child_frame_id = tf_child_frame_id;
 
-    odom.pose.pose.position = tf2::toMsg(enu_position);
-    odom.pose.pose.orientation = enu_orientation_msg;
-    tf2::toMsg(baselink_linear, odom.twist.twist.linear);
-    odom.twist.twist.angular = baselink_angular_msg;
+    odom.pose.pose.position.x = pos_ned.x;
+    odom.pose.pose.position.y = pos_ned.y;
+    odom.pose.pose.position.z = pos_ned.z;
 
-    odom.pose.covariance[0] = pos_ned.covariance[0];                   // x
-    odom.pose.covariance[7] = pos_ned.covariance[9];                   // y
-    odom.pose.covariance[14] = pos_ned.covariance[17];                 // z
+    
+    odom.twist.twist.linear.x = pos_ned.vx;
+    odom.twist.twist.linear.y = pos_ned.vy;
+    odom.twist.twist.linear.z = pos_ned.vz;
 
-    odom.twist.covariance[0] = pos_ned.covariance[24];                 // vx
-    odom.twist.covariance[7] = pos_ned.covariance[30];                 // vy
-    odom.twist.covariance[14] = pos_ned.covariance[35];                // vz
-    // TODO(vooon): orientation + angular velocity covariances from ATTITUDE_QUATERION_COV
 
     // publish odom always
     local_odom->publish(odom);
 
-    // publish pose_cov always
-    auto pose_cov = geometry_msgs::msg::PoseWithCovarianceStamped();
-    pose_cov.header = odom.header;
-    pose_cov.pose = odom.pose;
-    local_position_cov->publish(pose_cov);
-
-    // publish velocity_cov always
-    auto twist_cov = geometry_msgs::msg::TwistWithCovarianceStamped();
-    twist_cov.header.stamp = odom.header.stamp;
-    twist_cov.header.frame_id = odom.child_frame_id;
-    twist_cov.twist = odom.twist;
-    local_velocity_cov->publish(twist_cov);
-
-    // publish pose, velocity, tf if we don't have LOCAL_POSITION_NED
-    if (!has_local_position_ned) {
-      auto pose = geometry_msgs::msg::PoseStamped();
-      pose.header = odom.header;
-      pose.pose = odom.pose.pose;
-      local_position->publish(pose);
-
-      auto twist = geometry_msgs::msg::TwistStamped();
-      twist.header.stamp = odom.header.stamp;
-      twist.header.frame_id = odom.child_frame_id;
-      twist.twist = odom.twist.twist;
-      local_velocity_body->publish(twist);
-
-      // publish tf
-      publish_tf(odom);
-    }
-
-    // publish accelerations
-    auto accel = geometry_msgs::msg::AccelWithCovarianceStamped();
-    accel.header = odom.header;
-
-    auto enu_accel = ftf::transform_frame_ned_enu(
-      Eigen::Vector3d(
-        pos_ned.ax, pos_ned.ay,
-        pos_ned.az));
-    tf2::toMsg(enu_accel, accel.accel.accel.linear);
-
-    accel.accel.covariance[0] = pos_ned.covariance[39];                // ax
-    accel.accel.covariance[7] = pos_ned.covariance[42];                // ay
-    accel.accel.covariance[14] = pos_ned.covariance[44];               // az
-
-    local_accel->publish(accel);
   }
 };
 
