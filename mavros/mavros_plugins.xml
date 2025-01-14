@@ -1,28 +1,9 @@
 <?xml version="1.0"?>
 <library path="mavros_plugins">
-  <!-- <class name="actuator_control" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::ActuatorControlPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <class name="altitude" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::AltitudePlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <class name="command" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::CommandPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
-  <!-- <class name="ftp" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::FTPPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="geofence" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::GeofencePlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <class name="global_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::GlobalPositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
-  <class name="home_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::HomePositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
-  <class name="imu" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::IMUPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <class name="local_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::LocalPositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
-  <!-- <class name="manual_control" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::ManualControlPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="nav_controller_output" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::NavControllerOutputPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
   <class name="param" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::ParamPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
-  <!-- <class name="rallypoint" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::RallypointPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="rc_io" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::RCIOPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="setpoint_accel" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SetpointAccelerationPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="setpoint_attitude" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SetpointAttitudePlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="setpoint_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SetpointPositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="setpoint_raw" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SetpointRawPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="setpoint_trajectory" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SetpointTrajectoryPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="setpoint_velocity" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SetpointVelocityPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
   <class name="sys_status" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SystemStatusPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <class name="sys_time" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SystemTimePlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
-  <!-- <class name="waypoint" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::WaypointPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
-  <!-- <class name="wind_estimation" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::WindEstimationPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
   <class name="ground_control_unit_detection" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::GroundControlUnitDetections&gt;" base_class_type="mavros::plugin::PluginFactory" />
 </library>
