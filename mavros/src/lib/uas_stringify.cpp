@@ -235,6 +235,7 @@ std::string UAS::str_mode_v10(uint8_t base_mode, uint32_t custom_mode)
 
 static bool cmode_find_cmap(const cmode_map & cmap, std::string & cmode_str, uint32_t & cmode)
 {
+  auto lg = rclcpp::get_logger("uas");
   // 1. try find by name
   for (auto & mode : cmap) {
     if (mode.second == cmode_str) {
@@ -249,7 +250,7 @@ static bool cmode_find_cmap(const cmode_map & cmap, std::string & cmode_str, uin
     cmode = std::stoi(cmode_str, 0, 0);
     return true;
   } catch (std::invalid_argument & ex) {
-    // failed
+    RCLCPP_ERROR(lg, "MODE: Unknown mode: %s", cmode_str);
   }
 
   // Debugging output.
@@ -258,7 +259,7 @@ static bool cmode_find_cmap(const cmode_map & cmap, std::string & cmode_str, uin
     os << " " << mode.second;
   }
 
-  auto lg = rclcpp::get_logger("uas");
+  
   RCLCPP_ERROR_STREAM(lg, "MODE: Unknown mode: " << cmode_str);
   RCLCPP_INFO_STREAM(lg, "MODE: Known modes are:" << os.str());
 

@@ -78,7 +78,7 @@ public:
         tf_child_frame_id = p.as_string();
       });
 
-    auto sensor_qos = rclcpp::SensorDataQoS().reliability(rclcpp::ReliabilityPolicy::BestEffort);
+    auto sensor_qos = rclcpp::SensorDataQoS();
     local_odom = node->create_publisher<nav_msgs::msg::Odometry>("~/odom", sensor_qos);
   }
 

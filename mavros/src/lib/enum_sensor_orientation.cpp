@@ -184,7 +184,7 @@ int sensor_orientation_from_str(const std::string & sensor_orientation)
       return idx;
     }
   } catch (std::invalid_argument & ex) {
-    // failed
+    RCLCPP_ERROR(logger, "SENSOR: wrong orientation str: %s", sensor_orientation);
   }
 
   RCLCPP_ERROR_STREAM(logger, "SENSOR: wrong orientation str: " << sensor_orientation);

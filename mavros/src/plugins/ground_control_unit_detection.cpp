@@ -101,7 +101,7 @@ private:
     Eigen::Vector3d velocity_ned;
     uint8_t child_frame_id;
 
-    child_frame_id = static_cast<uint8_t>(std::stoi(req->child_frame_id));
+    child_frame_id = 1; // !!! when using radar for self detection, this should be 1 for target detection and 2 for self detection
 
     position_ned[0] = req->pose.pose.position.x;
     position_ned[1] = req->pose.pose.position.y;

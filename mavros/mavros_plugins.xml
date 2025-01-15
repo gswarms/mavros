@@ -2,7 +2,7 @@
 <library path="mavros_plugins">
   <class name="command" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::CommandPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <class name="local_position" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::LocalPositionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
-  <class name="param" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::ParamPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
+  <!-- <class name="param" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::ParamPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" /> -->
   <class name="sys_status" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SystemStatusPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <class name="sys_time" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SystemTimePlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <class name="ground_control_unit_detection" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::GroundControlUnitDetections&gt;" base_class_type="mavros::plugin::PluginFactory" />
