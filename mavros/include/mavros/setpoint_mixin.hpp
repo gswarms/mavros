@@ -92,7 +92,7 @@ class LocalPositionNEDCOVMixin
 public:
 //! Message specification: @p https://mavlink.io/en/messages/common.html#LOCAL_POSITION_NED_COV
   void local_position_ned_cov(
-    uint32_t time_boot_ms, 
+    uint64_t time_boot_ms, 
     uint8_t coordinate_frame,
     Eigen::Vector3d p,
     Eigen::Vector3d v,
