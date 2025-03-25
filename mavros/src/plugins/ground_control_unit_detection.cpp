@@ -85,7 +85,7 @@ private:
     v_cov.setZero();  // Initialize all elements to 0
 
     local_position_ned_cov(
-      get_time_boot_ms(stamp),
+      (uint64_t)get_time_boot_ms(stamp),
       child_frame_id,
       position_ned,
       velocity_ned,
