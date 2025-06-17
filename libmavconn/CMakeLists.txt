@@ -30,15 +30,18 @@ list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 ## System dependencies are found with CMake's conventions
 find_package(console_bridge REQUIRED)
 find_package(ASIO REQUIRED)
-find_package(mavlink REQUIRED)
 
 include(em_expand)
+
+set(MAVLINK_V20_DIALECTS "common;ardupilotmega")
+set(mavlink2_DIALECTS "common;ardupilotmega")
 
 include_directories(
   include
   ${CMAKE_CURRENT_BINARY_DIR}/generated/include
   ${ASIO_INCLUDE_DIRS}
-  ${mavlink_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/../mavlink/generated/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/../mavlink/generated/include/mavlink/
   ${console_bridge_INCLUDE_DIRS}
 )
 

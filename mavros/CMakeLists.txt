@@ -27,7 +27,6 @@ find_package(pluginlib REQUIRED)
 find_package(rcpputils REQUIRED)
 find_package(message_filters REQUIRED)
 
-find_package(mavlink REQUIRED)
 find_package(libmavconn REQUIRED)
 find_package(console_bridge REQUIRED)
 #find_package(rosconsole_bridge REQUIRED)  # XXX TODO: connect libmavconn loggers
@@ -64,7 +63,7 @@ include_directories(
 )
 
 include_directories(
-  ${mavlink_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/../mavlink/generated/include
   ${EIGEN3_INCLUDE_DIRS}
   ${GeographicLib_INCLUDE_DIRS}
 )
