@@ -74,31 +74,31 @@ private:
     const mavlink::mavlink_message_t * msg [[maybe_unused]],
     mavlink::common::msg::INTERCEPTION_DATA & interception, plugin::filter::SystemAndOk filter [[maybe_unused]])
   {
-    auto miss_distance_msg = std_msgs::msg::Float32();
-    miss_distance_msg.data = interception.miss_distance;
-    miss_distance_pub->publish(miss_distance_msg);
+    auto miss_distance_msg                = std_msgs::msg::Float32();
+    auto tgo_msg                          = std_msgs::msg::Float32();
+    auto position_std_norm_msg            = std_msgs::msg::Float32();
+    auto substate_msg                     = std_msgs::msg::Int32();
+    auto target_detected_msg              = std_msgs::msg::Bool();
+    auto estimated_relative_position_msg  = std_msgs::msg::Float32MultiArray();
 
-    auto tgo_msg = std_msgs::msg::Float32();
-    tgo_msg.data = interception.tgo;
-    tgo_pub->publish(tgo_msg);
 
-    auto position_std_norm_msg = std_msgs::msg::Float32();
-    position_std_norm_msg.data = interception.position_std_norm;
-    position_std_norm_pub->publish(position_std_norm_msg);
+    miss_distance_msg.data                =     interception.miss_distance;
+    tgo_msg.data                          =     interception.tgo;
+    position_std_norm_msg.data            =     interception.position_std_norm;
+    substate_msg.data                     =     interception.substate;
+    target_detected_msg.data              =     interception.target_detected;
 
-    auto substate_msg = std_msgs::msg::Int32();
-    substate_msg.data = interception.substate;
-    substate_pub->publish(substate_msg);
-
-    auto target_detected_msg = std_msgs::msg::Bool();
-    target_detected_msg.data = interception.target_detected;
-    target_detected_pub->publish(target_detected_msg);
-
-    auto estimated_relative_position_msg = std_msgs::msg::Float32MultiArray();
     estimated_relative_position_msg.data.resize(3);
     estimated_relative_position_msg.data[0] = interception.estimated_relative_position[0];
     estimated_relative_position_msg.data[1] = interception.estimated_relative_position[1];
     estimated_relative_position_msg.data[2] = interception.estimated_relative_position[2];
+
+    miss_distance_pub->publish(miss_distance_msg);
+    tgo_pub->publish(tgo_msg);
+    position_std_norm_pub->publish(position_std_norm_msg);
+    substate_pub->publish(substate_msg);
+    target_detected_pub->publish(target_detected_msg);
+    
     estimated_relative_position_pub->publish(estimated_relative_position_msg);
   }
 };
