@@ -6,4 +6,5 @@
   <class name="sys_status" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SystemStatusPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <class name="sys_time" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::SystemTimePlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
   <class name="ground_control_unit_detection" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::GroundControlUnitDetections&gt;" base_class_type="mavros::plugin::PluginFactory" />
+  <class name="interception" type="mavros::plugin::PluginFactoryTemplate&lt;mavros::std_plugins::InterceptionPlugin&gt;" base_class_type="mavros::plugin::PluginFactory" />
 </library>

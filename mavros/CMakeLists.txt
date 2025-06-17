@@ -156,6 +156,7 @@ add_library(mavros_plugins SHARED
   src/plugins/sys_time.cpp
   src/plugins/waypoint.cpp
   src/plugins/wind_estimation.cpp
+  src/plugins/interception.cpp
 
   # ground_control_detection
   src/plugins/ground_control_unit_detection.cpp
