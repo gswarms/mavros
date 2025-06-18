@@ -43,8 +43,6 @@ public:
   {
     enable_node_watch_parameters();
 
-    auto sensor_qos = rclcpp::SensorDataQoS();
-
     miss_distance_pub               = node->create_publisher<std_msgs::msg::Float32>("interception/miss_distance", 1);
     tgo_pub                         = node->create_publisher<std_msgs::msg::Float32>("interception/tgo", 1);
     position_std_norm_pub           = node->create_publisher<std_msgs::msg::Float32>("interception/position_std_norm", 1);
@@ -52,6 +50,10 @@ public:
     target_detected_pub             = node->create_publisher<std_msgs::msg::Bool>("interception/target_detected", 1);
     estimated_relative_position_pub = node->create_publisher<std_msgs::msg::Float32MultiArray>(
       "interception/estimated_relative_position", 1);
+
+    RCLCPP_INFO(
+      node->get_logger(),
+      "Interception plugin initialized!");
   }
 
   Subscriptions get_subscriptions() override
@@ -74,13 +76,13 @@ private:
     const mavlink::mavlink_message_t * msg [[maybe_unused]],
     mavlink::common::msg::INTERCEPTION_DATA & interception, plugin::filter::SystemAndOk filter [[maybe_unused]])
   {
+
     auto miss_distance_msg                        = std_msgs::msg::Float32();
     auto tgo_msg                                  = std_msgs::msg::Float32();
     auto position_std_norm_msg                    = std_msgs::msg::Float32();
     auto substate_msg                             = std_msgs::msg::Int32();
     auto target_detected_msg                      = std_msgs::msg::Bool();
     auto estimated_relative_position_msg          = std_msgs::msg::Float32MultiArray();
-
 
     miss_distance_msg.data                        =     interception.miss_distance;
     tgo_msg.data                                  =     interception.tgo;
