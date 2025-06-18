@@ -84,11 +84,11 @@ private:
     auto target_detected_msg                      = std_msgs::msg::Bool();
     auto estimated_relative_position_msg          = std_msgs::msg::Float32MultiArray();
 
-    miss_distance_msg.data                        =     interception.miss_distance;
-    tgo_msg.data                                  =     interception.tgo;
-    position_std_norm_msg.data                    =     interception.position_std_norm;
-    substate_msg.data                             =     interception.substate;
-    target_detected_msg.data                      =     interception.target_detected;
+    miss_distance_msg.data                        = interception.miss_distance;
+    tgo_msg.data                                  = interception.tgo;
+    position_std_norm_msg.data                    = interception.position_std_norm;
+    substate_msg.data                             = interception.substate;
+    target_detected_msg.data                      = interception.target_detected;
 
     estimated_relative_position_msg.data.resize(3);
     estimated_relative_position_msg.data[0]       = interception.estimated_relative_position[0];
