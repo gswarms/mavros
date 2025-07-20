@@ -114,7 +114,7 @@ public:
     //     for a in ('x', 'y', 'z'):
     //         cog.outl(f"sp.{fp}{a} = {vp}.{a}();")
     // ]]]
-    sp.time_usec = time_boot_ms;
+    sp.time_usec = time_boot_ms * 1000; // Convert to microseconds
     sp.estimator_type = coordinate_frame;
 
     sp.x = p[0];

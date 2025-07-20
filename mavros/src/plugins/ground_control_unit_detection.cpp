@@ -72,17 +72,26 @@ private:
    *
    * @warning Send only AFX AFY AFZ. ENU frame.
    */
-  void send_detection(const rclcpp::Time & stamp, const Eigen::Vector3d & position_ned, const Eigen::Vector3d & velocity_ned, const uint8_t child_frame_id)
+  void send_detection(const rclcpp::Time & stamp, 
+                      const Eigen::Vector3d & position_ned, 
+                      const Eigen::Vector3d & velocity_ned,
+                      const Eigen::Vector3d & position_covariance,
+                      const Eigen::Vector3d & velocity_covariance,
+                      const uint8_t child_frame_id)
   {
 
     std::string _frame;
     node->get_parameter("frame", _frame);
 
     Eigen::Matrix<float, 1, 9> p_cov;
-    p_cov.setZero();  // Initialize all elements to 0
+    p_cov << position_covariance[0], 0, 0,
+              0, position_covariance[1], 0,
+              0, 0, position_covariance[2];
 
     Eigen::Matrix<float, 1, 9> v_cov;
-    v_cov.setZero();  // Initialize all elements to 0
+    v_cov << velocity_covariance[0], 0, 0,
+              0, velocity_covariance[1], 0,
+              0, 0, velocity_covariance[2];
 
     local_position_ned_cov(
       (uint64_t)get_time_boot_ms(stamp),
@@ -99,6 +108,8 @@ private:
   {
     Eigen::Vector3d position_ned;
     Eigen::Vector3d velocity_ned;
+    Eigen::Vector3d position_covariance;
+    Eigen::Vector3d velocity_covariance;
     uint8_t child_frame_id;
 
     child_frame_id = 1; // !!! when using radar for self detection, this should be 1 for target detection and 2 for self detection
@@ -111,7 +122,15 @@ private:
     velocity_ned[1] = req->twist.twist.linear.y;
     velocity_ned[2] = req->twist.twist.linear.z;
 
-    this->send_detection(req->header.stamp, position_ned, velocity_ned, child_frame_id);
+    position_covariance[0] = req->pose.covariance[0];
+    position_covariance[1] = req->pose.covariance[7];
+    position_covariance[2] = req->pose.covariance[14];
+
+    velocity_covariance[0] = req->twist.covariance[0];
+    velocity_covariance[1] = req->twist.covariance[7];
+    velocity_covariance[2] = req->twist.covariance[14];
+
+    this->send_detection(req->header.stamp, position_ned, velocity_ned, position_covariance, velocity_covariance, child_frame_id);
   }
 };
 
