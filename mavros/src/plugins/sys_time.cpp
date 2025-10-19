@@ -477,7 +477,7 @@ private:
 
       if (high_rtt_count > max_cons_high_rtt) {
         // Issue a warning to the user if the RTT is constantly high
-        RCLCPP_WARN(get_logger(), "TM: RTT too high for timesync: %0.2f ms.", rtt_ns / 1000000.0);
+        RCLCPP_DEBUG(get_logger(), "TM: RTT too high for timesync: %0.2f ms.", rtt_ns / 1000000.0);
 
         // Reset counter
         high_rtt_count = 0;
