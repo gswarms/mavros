@@ -734,21 +734,21 @@ private:
       case enum_value(MAV_SEVERITY::ALERT):
       case enum_value(MAV_SEVERITY::CRITICAL):
       case enum_value(MAV_SEVERITY::ERROR):
-        RCLCPP_ERROR_STREAM(node->get_logger(), "FCU: " << text);
+        RCLCPP_DEBUG_STREAM(node->get_logger(), "FCU: " << text);
         break;
       case enum_value(MAV_SEVERITY::WARNING):
       case enum_value(MAV_SEVERITY::NOTICE):
-        RCLCPP_WARN_STREAM(node->get_logger(), "FCU: " << text);
+        RCLCPP_DEBUG_STREAM(node->get_logger(), "FCU: " << text);
         break;
       case enum_value(MAV_SEVERITY::INFO):
-        RCLCPP_INFO_STREAM(node->get_logger(), "FCU: " << text);
+        RCLCPP_DEBUG_STREAM(node->get_logger(), "FCU: " << text);
         break;
       case enum_value(MAV_SEVERITY::DEBUG):
         RCLCPP_DEBUG_STREAM(node->get_logger(), "FCU: " << text);
         break;
       // [[[end]]] (checksum: d05760afbeece46673c8f73f89b63f3d)
       default:
-        RCLCPP_WARN_STREAM(node->get_logger(), "FCU: UNK(" << +severity << "): " << text);
+        RCLCPP_DEBUG_STREAM(node->get_logger(), "FCU: UNK(" << +severity << "): " << text);
         break;
     }
   }
