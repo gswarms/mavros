@@ -120,6 +120,7 @@ public:
     // fused global position
     gp_fix_pub = node->create_publisher<sensor_msgs::msg::NavSatFix>("~/global", sensor_qos);
     gp_odom_pub = node->create_publisher<nav_msgs::msg::Odometry>("~/local", sensor_qos);
+    gp_odom_enu_pub = node->create_publisher<nav_msgs::msg::Odometry>("~/odom", sensor_qos);
     gp_rel_alt_pub = node->create_publisher<std_msgs::msg::Float64>("~/rel_alt", sensor_qos);
     gp_hdg_pub = node->create_publisher<std_msgs::msg::Float64>("~/compass_hdg", sensor_qos);
 
@@ -161,6 +162,7 @@ private:
   rclcpp::Publisher<std_msgs::msg::UInt32>::SharedPtr raw_sat_pub;
   rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr gp_fix_pub;
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr gp_odom_pub;
+  rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr gp_odom_enu_pub;
   rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr gp_rel_alt_pub;
   rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr gp_hdg_pub;
   rclcpp::Publisher<geographic_msgs::msg::GeoPointStamped>::SharedPtr gp_global_origin_pub;
@@ -300,6 +302,7 @@ private:
     plugin::filter::SystemAndOk filter [[maybe_unused]])
   {
     auto odom = nav_msgs::msg::Odometry();
+    auto odom_enu = nav_msgs::msg::Odometry();
     auto fix = sensor_msgs::msg::NavSatFix();
     auto relative_alt = std_msgs::msg::Float64();
     auto compass_heading = std_msgs::msg::Float64();
@@ -415,11 +418,25 @@ private:
       rot_cov,
       rot_cov;
 
+    /**
+     * @brief By default, the ~/local is publishing ENU-like position, but the velocities are in wired frame - END. So we
+     * need to convert the velocity to ENU frame for ~/odom
+     */
+    
+    odom_enu.header = odom.header;
+    odom_enu.child_frame_id = odom.child_frame_id;
+    odom_enu.pose = odom.pose;
+    tf2::toMsg(
+      Eigen::Vector3d(gpos.vy, gpos.vx, -gpos.vz) / 1E2,
+      odom_enu.twist.twist.linear);
+    
+
     // publish
     gp_fix_pub->publish(fix);
     gp_odom_pub->publish(odom);
     gp_rel_alt_pub->publish(relative_alt);
     gp_hdg_pub->publish(compass_heading);
+    gp_odom_enu_pub->publish(odom_enu);
 
     // TF
     if (tf_send) {
