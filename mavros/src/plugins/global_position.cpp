@@ -420,17 +420,22 @@ private:
 
     /**
      * @brief By default, the ~/local is publishing ENU-like position, but the velocities are in wired frame - END. So we
-     * need to convert the velocity to ENU frame for ~/odom
+     * need to convert the velocity to NED frame for ~/odom
      */
     
     odom_enu.header = odom.header;
     odom_enu.child_frame_id = odom.child_frame_id;
-    odom_enu.pose = odom.pose;
-    tf2::toMsg(
-      Eigen::Vector3d(gpos.vy, gpos.vx, -gpos.vz) / 1E2,
-      odom_enu.twist.twist.linear);
-    
 
+    // current odom position is ENU -> convert to NED
+    odom_enu.pose.pose.position.x = odom.pose.pose.position.y;
+    odom_enu.pose.pose.position.y = odom.pose.pose.position.x;
+    odom_enu.pose.pose.position.z = -odom.pose.pose.position.z;
+
+    // velocity is END -> convert to NED
+    odom_enu.twist.twist.linear.x = odom.twist.twist.linear.y;
+    odom_enu.twist.twist.linear.y = odom.twist.twist.linear.x;
+    odom_enu.twist.twist.linear.z = odom.twist.twist.linear.z;
+    
     // publish
     gp_fix_pub->publish(fix);
     gp_odom_pub->publish(odom);
