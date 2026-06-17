@@ -671,6 +671,7 @@ private:
   MAV_TYPE conn_heartbeat_mav_type;
   static constexpr int RETRIES_COUNT = 6;
   int version_retries;
+  bool version_logged{false};
   bool disable_diag;
   bool has_battery_status0;
   float battery_voltage;
@@ -1087,11 +1088,15 @@ private:
       uas->update_capabilities(true, apv.capabilities);
     }
 
-    // but print all version responses
-    if (uas->is_ardupilotmega()) {
-      process_autopilot_version_apm_quirk(apv, msg->sysid, msg->compid);
-    } else {
-      process_autopilot_version_normal(apv, msg->sysid, msg->compid);
+    // print version response only once per connection to avoid log spam
+    if (!version_logged) {
+      version_logged = true;
+
+      if (uas->is_ardupilotmega()) {
+        process_autopilot_version_apm_quirk(apv, msg->sysid, msg->compid);
+      } else {
+        process_autopilot_version_normal(apv, msg->sysid, msg->compid);
+      }
     }
 
     // Store generic info of all autopilot seen
@@ -1358,6 +1363,7 @@ private:
 
     // if connection changes, start delayed version request
     version_retries = RETRIES_COUNT;
+    version_logged = false;
     if (connected) {
       autopilot_version_timer->reset();
     } else {
